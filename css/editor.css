@@ -1,0 +1,113 @@
+body {
+    background-color: #f2f2f2;
+}
+
+
+/* summernote container */
+.note-editor.note-frame {
+    border-top: 0px;
+    border-radius: 0px 0px 5px 5px;
+    background-color: darkseagreen;
+}
+/* Bend toolbar with navbar */
+.note-toolbar.panel-heading {
+    padding-left: 1%;
+    background-color: darkseagreen;
+}
+
+/* Make larger buttons in the toolbar*/
+.btn-group-sm>.btn, .btn-sm {
+    font-size: large;
+}
+
+.navbar {
+    width: 70%;
+    margin: auto;
+    background-color: white;
+    border: 0px;
+    background-color: darkseagreen;
+    border-radius: 15px 15px 0px 0px;
+    margin-top: 1%;
+    padding: 5px;
+}
+
+.navbar-brand {
+    max-width: 15%;
+}
+
+.container-fluid {
+    margin: auto;
+}
+
+.container {
+    width: 70%;
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color: white;
+}
+
+#editor {
+    border: 0px;
+    height: 80%;
+}
+
+#title {
+    font-size: -webkit-xxx-large;
+    font-family: monospace;
+    color: cornsilk;
+}
+
+#logo_image {
+    padding-top: 5px;
+}
+
+/* classes for highlighting  */
+.male {
+    background-color: lightblue;
+    cursor: pointer;
+}
+
+.female {
+    background-color: pink;
+    cursor: pointer;
+}
+
+.neutral {
+    background-color: transparent;
+}
+
+/* Popover list */
+.popover-content {
+    padding: 0px;
+    padding-bottom: 2px;
+}
+
+.popover-content li {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.popover-content ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    font-size: large;
+  }
+
+.popover-content li:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.popover-content li:active {
+    background-color:lightgreen;
+    cursor: pointer;
+}
+
+#ignore_item {
+    font-size: larger;
+    text-align: center;
+    padding-top: 1px;
+    border-top: 1px solid lightgray;
+    list-style-position: inside;
+}

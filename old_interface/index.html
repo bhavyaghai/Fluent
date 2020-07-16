@@ -1,0 +1,132 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>FairText</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='/css/scatter.css') }}">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body style="background-color: #F0F0F0; overflow:hidden;">
+  	<div class="container-fluid" style="padding-left: 0px; padding-right: 0px;">
+		
+  		<nav class="navbar navbar-inverse bg-primary" style="background-color: cornflowerblue; border-radius:0px; color: black; margin-bottom: 0px" id="navbar"> <!-- #3B5998 -->
+            <div class="container-fluid" ng-controller = "navController">
+            <div>
+                <a class="navbar-brand" href="#/" style="color:white;"><b>FairText: Make your Text Objective & Inclusive</b></a>
+            </div>
+        	</div>
+        </nav>
+    	
+  		<div class="row" style="height: 100%; background-color: floralwhite;">
+				
+				<div class="col-md-2" style="padding:20px;">
+
+					<div style="margin-bottom: 10px;">
+						<span>Word Embedding:</span>
+						<select id="dropdown_embedding">
+							<option>Word2Vec</option>
+							<option>Word2Vec debiased</option>
+							<option selected>Glove (wiki 300d)</option>
+							<option>Hindi fastText</option>
+							<option>French fastText</option>
+							<option>Temp</option>
+							<option disabled>German fastText</option>
+							<option disabled>Chinese fastText</option>
+							<option disabled>Spanish fastText</option>
+						</select>
+					</div>
+					<br>
+
+					<div class="form-group">
+								<label for="gp1" style="background-color: orangered; color:white;">Group 1:</label>
+								<select id="gp1_dropdown" style="float:right;" onchange="changeBiastype(this.id)"></select>
+								<p style="clear:left;"></p>
+								<textarea class="form-control" rows="3" id="gp1"></textarea>
+								
+								<br>
+								<label for="gp2" style="background-color: green; color:white;">Group 2:</label>
+								<select id="gp2_dropdown" style="float:right;" onchange="changeBiastype(this.id)"></select>
+								<p style="clear:left;"></p>
+								<textarea class="form-control" rows="3" id="gp2"></textarea>
+								<p style="clear:left;"></p>
+					</div>
+
+					<div style="margin-bottom: 10px; display: none;">
+							<span>Identify Bias:</span>
+							<select id="dropdown_identify_bias">
+								<option>Pairs</option>
+								<option selected>Group</option>
+							</select>
+					</div>
+
+					<label for="target">Target:</label>
+					<select style="float:right;" id="dropdown_target" onchange="changeTarget(this.value)"></select>
+					<p style="clear:left;"></p>
+					<textarea class="form-control" rows="8" id="target"></textarea>
+					<br>
+					<button type="submit" class="btn btn-primary center-block btn-sm" id="submitButton">Plot!</button>
+					<br>
+					<!--
+					<button type="submit" class="btn btn-primary center-block btn-sm" id="showBias" style="margin-top: 10px;">Show Bias</button>
+					-->
+				</div>
+				
+  			<div class="col-md-8">
+				<div id="scatter_options" style="height:6%; float:left; width:100%; padding-top:10px; padding-left:150px;">
+					<label class="checkbox-inline" style="padding-right: 10px;"><b>x:</b><div id="x" style="display:inline-block; width:25px;"></div></label>
+					<label class="checkbox-inline" style="padding-right: 10px;"><b>y:</b><div id="y" style="display:inline-block; width:25px;"></div></label>
+					<label class="checkbox-inline" style="padding-right: 30px;"><b>word:</b><div id="word" style="display:inline-block; width:60px;"></div></label>
+					<label style="padding-right: 10px;"><input type="checkbox" checked data-toggle="toggle" data-on="Dots" data-off="Text" id="scatter_represent" data-onstyle="success" data-offstyle="warning" data-size="small"></label>
+					<label class="checkbox-inline" style="padding-right: 30px;"><button type="button" class="btn btn-sm" onclick="changeZoom()"><b>Reset Zoom</b></button></label>
+					<p style="clear:left;"></p>
+				</div>
+				<div id="scatter" style="background-color: white;"></div>
+    		</div>
+    		<div class="col-md-2" style="padding-right:20px; padding-top:20px; padding-left: 0px;">
+					<div id="search" style="height: 35%">
+						<!-- Search form -->
+						<!-- <input class="form-control" type="text" placeholder="Search" aria-label="Search" onsearch="searchjs()" id="searchBar"> -->
+						<datalist id="json-datalist"></datalist>
+						<input class="form-control" type="search" onsearch="searchbox()" id="searchBar" list="json-datalist" placeholder="Search">    <!-- searchjs(function(res){}) -->
+						<div id="searchRes"></div>
+					</div>
+
+					<div style="height: 55%">
+						<h4><b style="padding-right: 5px;">Direct Bias</b><span id="directBiasValue" style="font-size:medium;"></span></h4>
+						<div class="slider-wrapper">
+							<span style="float:left; font-size:small;">Threshold:</span>
+							<input type="range" min="0.0" max="0.15" step="0.01" value="0" style="width:50%; float:left;" id="threshold" onchange="coeff_val_change(this.value)">
+							<span id="coeff_slider_val" style="float:right; font-size:small;">0.0</span>
+							<p style="clear:left;"></p>
+						</div>
+						<div id="directBias" style="overflow: auto; height: 80%;"></div> 
+						<div class="row" style="margin-top: 10px;">
+							<div class="col-xs-6 text-left">
+								<button type="submit" class="btn btn-primary center-block btn-sm" id="debias" >Debias!</button>
+							</div>
+							<div class="col-xs-4 text-right">
+								<!-- <a href="/download/" id="download" class="btn btn-primary center-block btn-sm" role="button">Download</a> -->
+								<button type="submit" class="btn btn-primary center-block btn-sm" id="debias" onclick="window.open('/download', '_blank');">Download</button>
+							</div>
+						</div>
+					</div>
+    		</div>
+    	</div>
+  	
+  	</div>
+
+		<script src="https://code.jquery.com/jquery-2.2.4.min.js" crossorigin="anonymous"></script>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+  		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.7/d3-tip.js">	 </script>
+		<script src="{{ url_for('static', filename='/js/scatter.js') }}"></script>
+		<script src="{{ url_for('static', filename='/js/input_logic.js') }}"></script>
+		<script src="{{ url_for('static', filename='/js/searchResults.js') }}"></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.1/spin.min.js'></script>
+		<script src="https://cdn.rawgit.com/xcash/bootstrap-autocomplete/v2.0.0/dist/latest/bootstrap-autocomplete.min.js"></script>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  </body>
+</html>

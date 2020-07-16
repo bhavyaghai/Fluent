@@ -1,0 +1,34 @@
+<h4>Bio</h4>
+      <p class="text-justify">
+        Hi !!! I am a PhD Candidate working with <a href="http://www3.cs.stonybrook.edu/~mueller/" target="_blank">Prof. Klaus Mueller</a> in the Computer Science Department at <a href="https://www.cs.stonybrook.edu/home" target="_blank">Stony Brook University</a>. I love crunching numbers & developing interactive systems to tackle high impact social problems. Recently, I was awarded with <a href="https://iacs.stonybrook.edu/opportunities/scholarships/junior-researcher-award" target="_blank">IACS Junior researcher Award</a> for my upcoming research on tackling Algorithmic Bias through human centered AI. Last year, I was awarded with Bloomberg Immersion fellowship. As a part of the fellowship, I worked with a non-profit, <a href="http://www.matriculate.org/about-matriculate" target="_blank">Matriculate</a>, and built a real time dashboard to enhance their decision making. As Data Science for Social Good fellow at <a href="https://www.cc.gatech.edu/" target="_blank">Georgia Tech</a>, I got the opportunity to work with <a href="https://www.cc.gatech.edu/~ewz/Welcome.html" target="_blank">Prof. Ellen Zegura</a>. I and my team tried to counter housing injustice by analysing Atlanta's anti-displacement policy & communicating its possible impacts. I also worked as a research intern at <a href="http://www.iitd.ac.in/" target="_blank">Indian Institute of Technology, Delhi</a> where I tried to predict solar radiation to ensure power supply-demand equilibrium. Previously, I completed my Bachelor’s & Masters in Information Technology from <a href="https://iiitm.ac.in/" target="_blank">Indian Institute of Information Technology, Gwalior</a>. For my master's thesis, I worked on ensemble learning and recommender systems under the guidance of <a href="https://scholar.google.com/citations?user=3zztZKMAAAAJ&hl=en" target="_blank">Prof. Anupam Shukla</a>. I am also the recipient of Chairman Fellowship Award from Stony Brook University (2016). <br/><br/>
+
+        <i>Research Interests:</i> <br/>
+        <ul>
+          <li>Algorithmic Bias</li> 
+          <li>Human Centered AI</li>
+          <li>Data for Social Good</li>
+          <li>Machine Learning</li>
+          <li>Data Visualization</li>
+        </ul>
+      </p>
+      <br>
+      <h4>Recent Updates</h4><hr style="margin-top:0px; border-top: 1px dotted #8c8b8b; border-bottom: 1px dotted #fff;"> 
+      <ul>
+      	<li><b>Feb 2019</b> Won <b><a href="https://www.cs.stonybrook.edu/about-us/News/Celebrating-CS-Graduate-Student-Research?fbclid=IwAR0JrJkpSDzhZ6BpzhUPM4B1WUE6NNaCvRE3EAUsdDQfHznDd6DYbVmOquc" target="_blank">Best Research Talk Award !!!</a> @<a href="https://www3.cs.stonybrook.edu/~grs/" target="_blank">GRD 2019</b></a> </li>
+      	<li><b>Dec 2018</b> My research on <a href="./docs/FAT'19 Research summary.pdf" target="_blank"><em>"Tackling Algorithmic Bias through Human-centered AI"</em></a> selected for Doctoral Consortium @<a href="https://fatconference.org/index.html" target="_blank">FAT* Conference 2019</a> </li>
+      	<li><b>Aug2018</b> <a href="https://iacs.stonybrook.edu/opportunities/scholarships/junior-researcher-award" target="_blank"><b>Awarded with IACS Junior Researcher Award !!!</b></a> by IACS, Stony Brook University <a href="https://www.stonybrook.edu/commcms/iacs/news/2018/IACS_Jr_Res_Award_2018_Article.php" target="_blank">[media]</a></li>
+      	<li><b>Summer 2018</b> Research Intern at Nokia Bell Labs, Murray Hill, NJ </li>
+        <li><b>Feb2018</b> Awarded Full Silver Scholarship for <a href="https://odsc.com/boston" target="_blank">ODSC Boston</a></li>
+        <li><b>Oct2017</b> Presented my poster titled '<a href="./docs/vis17/paper.pdf" target="_blank">Visualization of Multivariate Data with Network Constraints using Multi-Objective Optimization.</a>' at <a href="http://ieeevis.org/year/2017/welcome" target="_blank">IEEE Vis 2017</a> </li>
+        <li><b>Sept2017</b> Presented our paper titled '<a href="./docs/dssg atlanta/chicago.pdf" target="_blank">Coupling Data Science with Participatory Planning for Equity in Urban Renewal Programs: An Analysis of Atlanta's Anti-Displacement Tax Fund</a>' at <a href="https://dssg.uchicago.edu/data-science-for-social-good-conference-2017/" target="_blank">Data Science for Social Good Conference, Chicago</a> </li>
+        <li><b>Aug 26,2017</b> Awarded Travel Grant award for <a href="https://dssg.uchicago.edu/data-science-for-social-good-conference-2017/" target="_blank">Data Science for Social Good Conference, Chicago</a> </li>
+        <li><b>July 28,2017</b> <a href="https://medium.com/@nycmedialab/data-for-good-bloomberg-supports-data-scientists-work-with-nonprofits-and-municipalities-to-solve-6d9ce6360ea8" target="_blank"><b>Awarded with Bloomberg Immersion Fellowship !!!</b></a></li>
+        <li><b>Summer2017</b>As DSSG Fellow, Worked with <a href="https://www.cc.gatech.edu/~ewz/Welcome.html" target="_blank">Prof. Ellen Zegura</a> at Georgia Tech, Atlanta  </li>
+        <li><b>Jan2017</b> Teaching Assistant for CSE CSE 337 Scripting languages for Spring'17 </li>
+        <li><b>Sept2016</b> Teaching Assistant for CSE 303 Theory of Computation & CSE 214 Computer Science II for Fall'16</li>
+        <li><b>Aug2016</b> <a href="https://www.cs.stonybrook.edu/about-us/News/CS-Faculty-Students-and-Staff-Recognized-Graduate-Student-Orientation" target="_blank"><b>Awarded Chairman's Fellowship Award by CS Dept., Stony Brook University !!!</b></a></li>
+        <li><b>Aug2016</b> Joined PhD program at CS department, Stony Brook University</li>
+        <li><b>Jun 6,2016</b> Started working as Software Engineer at <a href="http://www.infoedge.in/" target="_blank">InfoEdge India</a></li>
+        <li><b>May2016</b> Graduated with Master's in Information Technology from <a href="https://iiitm.ac.in/" target="_blank">IIIT Gwalior</a></li>
+      </ul>
+      <br>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FairText</title>
+    <link rel="icon" href="./icon/atom-icon.png">
+    <meta charset="utf-8">
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <!--
+                <a class="navbar-brand" id="logo_image" href="#">
+                    <img class="img-responsive" src="./icon/atom-icon.png" alt="Logo">
+                </a>  -->
+                <a class="navbar-brand" href="#"><p id="title"><strong>fairText</strong></p></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="summernote"></div>
+        <div class="row">
+            <div class="col-md-2 col-md-offset-4">
+                <span> <b>Highlight</b></span>
+                <input id="highlight" type="checkbox" checked data-toggle="toggle" data-on="Gender Bias" data-off="Default" data-onstyle="success" data-offstyle="default">
+            </div>    
+            <div class="col-md-2">
+                <div class="slider-wrapper" style="padding-right:20px;">
+                    <div style="float:left;">Threshold: </div>
+                    <div id="coeff_slider_val" style="float:right;">0.1</div>
+                    <div><input type="range" min="0.0" max="0.30" step="0.01" value="0.1" style="width:100%;" id="threshold" onchange="coeff_val_change(this.value)"></div>
+                    <p style="clear:left;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popover content --> 
+    <div class="popover-content" style="display: none">
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li id="ignore_item">Ignore</li>
+        </ul>
+    </div>
+
+    <!-- Include stylesheets -->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="./css/editor.css" rel="stylesheet">
+    <!-- Include JS scripts -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script> 
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
+    <script src="./js/editor.js"></script>
+    <script src="./js/main.js"></script>
+    <script src="./js/popover_events.js"></script>
+</body>
+</html>
