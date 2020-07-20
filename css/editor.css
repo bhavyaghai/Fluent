@@ -2,13 +2,28 @@ body {
     background-color: #f2f2f2;
 }
 
-
 /* summernote container */
 .note-editor.note-frame {
     border-top: 0px;
     border-radius: 0px 0px 5px 5px;
-    background-color: darkseagreen;
+    background-color: white;
 }
+
+/* summernote button */
+.note-btn-group .note-btn {
+    background-color: darkseagreen;
+    border: 0px;
+    font-size: 15px !important;
+}
+
+.note-toolbar {
+    background-color: darkseagreen !important;
+}
+
+.note-editor.note-airframe, .note-editor.note-frame {
+    border-top: 0px !important;
+}
+
 /* Bend toolbar with navbar */
 .note-toolbar.panel-heading {
     padding-left: 1%;
@@ -21,14 +36,15 @@ body {
 }
 
 .navbar {
-    width: 70%;
+    width: 80%;
     margin: auto;
     background-color: white;
     border: 0px;
-    background-color: darkseagreen;
+    background-color: darkseagreen !important;
     border-radius: 15px 15px 0px 0px;
     margin-top: 1%;
-    padding: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 .navbar-brand {
@@ -36,14 +52,12 @@ body {
 }
 
 .container-fluid {
-    margin: auto;
-}
-
-.container {
-    width: 70%;
+    width: 80%;
     padding-left: 0px;
     padding-right: 0px;
     background-color: white;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 #editor {
@@ -52,9 +66,11 @@ body {
 }
 
 #title {
-    font-size: -webkit-xxx-large;
+    font-size: xxx-large;
     font-family: monospace;
-    color: cornsilk;
+    font-weight: bold;
+    color: green;
+    margin-bottom: 0px;
 }
 
 #logo_image {
@@ -111,3 +127,15 @@ body {
     border-top: 1px solid lightgray;
     list-style-position: inside;
 }
+
+/* 
+navbar button: preferences button
+*/
+#preferences {
+    padding-top: 10px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+    background-color: transparent;
+    border-color: transparent;
+}
+

@@ -1,6 +1,7 @@
 var thresh;
 
 $(document).ready(function() {
+   //$('[data-toggle="tooltip"]').tooltip()
   // Load default content
   $.get("/get_default_content",res => {
     console.log(res);
@@ -94,8 +95,8 @@ function wrap_span(res) {
         else return span[0].outerHTML;
       });
     }
-    console.log(word);
-    console.log(s);
+    //console.log(word);
+    //console.log(s);
   }
   $('.note-editable')[0].innerHTML = s;
   //$('[data-toggle="popover"]').popover();

@@ -4,24 +4,38 @@
     <title>FairText</title>
     <link rel="icon" href="./icon/atom-icon.png">
     <meta charset="utf-8">
+    <!-- Include stylesheets -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="./css/editor.css" rel="stylesheet">
 </head>
 <body>
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" style="padding: 0px;"><p id="title">fluent</p></a>
+        <form class="form-inline">
+            <label class="btn btn-primary my-2 my-sm-0" type="button" data-toggle="modal" id="preferences" data-target="#preferences_modal" title="Set Preferences">
+                <i class="fa fa-bars" aria-hidden="true" style="font-size: xx-large; color: darkslategray;"></i>
+            </label>
+        </form>
+     </nav>
+    <!--
     <nav class="navbar navbar-default">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <!--
-                <a class="navbar-brand" id="logo_image" href="#">
-                    <img class="img-responsive" src="./icon/atom-icon.png" alt="Logo">
-                </a>  -->
-                <a class="navbar-brand" href="#"><p id="title"><strong>fluent</strong></p></a>
+            
+            <div class="collapse navbar-collapse">
+                <div class="nav navbar-nav navbar-right">
+                    <button type="submit" class="btn btn-default btn-lg" id="preferences" data-toggle="tooltip" title="Preferences">
+                        <i class="glyphicon glyphicon-menu-hamburger" aria-hidden="true" style="font-size: x-large;"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
-
-    <div class="container">
+    -->
+    <div class="container-fluid">
         <div id="summernote"></div>
         <div class="row">
-            <div class="col-md-2 col-md-offset-4">
+            <div class="col-md-2">
                 <span> <b>Highlight</b></span>
                 <input id="highlight" type="checkbox" checked data-toggle="toggle" data-on="Gender Bias" data-off="Default" data-onstyle="success" data-offstyle="default">
             </div>    
@@ -36,7 +50,7 @@
         </div>
     </div>
 
-    <!-- Popover content --> 
+    <!-- Popover content -- to show alternate words  --> 
     <div class="popover-content" style="display: none">
         <ul>
             <li></li>
@@ -48,19 +62,37 @@
         </ul>
     </div>
 
-    <!-- Include stylesheets -->
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <link href="./css/editor.css" rel="stylesheet">
+    <!-- Modal -->
+    <div class="modal" tabindex="-1" role="dialog" id="preferences_modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Modal body text goes here.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Include JS scripts -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script> 
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> 
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script src="./js/editor.js"></script>
     <script src="./js/main.js"></script>
     <script src="./js/popover_events.js"></script>
+    <script src="https://use.fontawesome.com/b3f54f4da6.js"></script>
 </body>
 </html>
