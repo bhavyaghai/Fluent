@@ -107,12 +107,13 @@ function wrap_span(res) {
 // function is called when threshold value is changed
 function coeff_val_change(newVal){
   thresh = newVal;
-  $('#coeff_slider_val').text(newVal);
+  $('#coeff_slider_val').text(newVal+'%');
+  /*
   var val = $('#highlight').prop('checked');
   if(val==true) {
     reset_highlight();
     get_biases();
-  }
+  } */
 }
 
 /*

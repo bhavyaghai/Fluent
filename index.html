@@ -18,20 +18,7 @@
             </label>
         </form>
      </nav>
-    <!--
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            
-            <div class="collapse navbar-collapse">
-                <div class="nav navbar-nav navbar-right">
-                    <button type="submit" class="btn btn-default btn-lg" id="preferences" data-toggle="tooltip" title="Preferences">
-                        <i class="glyphicon glyphicon-menu-hamburger" aria-hidden="true" style="font-size: x-large;"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-    -->
+  
     <div class="container-fluid">
         <div id="summernote"></div>
         <div class="row">
@@ -39,14 +26,6 @@
                 <span> <b>Highlight</b></span>
                 <input id="highlight" type="checkbox" checked data-toggle="toggle" data-on="Gender Bias" data-off="Default" data-onstyle="success" data-offstyle="default">
             </div>    
-            <div class="col-md-2">
-                <div class="slider-wrapper" style="padding-right:20px;">
-                    <div style="float:left;">Threshold: </div>
-                    <div id="coeff_slider_val" style="float:right;">0.1</div>
-                    <div><input type="range" min="0.0" max="0.30" step="0.01" value="0.1" style="width:100%;" id="threshold" onchange="coeff_val_change(this.value)"></div>
-                    <p style="clear:left;"></p>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -67,17 +46,30 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Modal title</h5>
+            <h5 class="modal-title">Set Preferences</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p>Modal body text goes here.</p>
+            <div>
+                <b>Easy</b> to pronounce words
+                <textarea id="easy_words" rows="4" style="width:100%;"></textarea>
+            </div><br>
+            <div>
+                <b>Difficult</b> to pronounce words       
+                <textarea id="diff_words" rows="4" style="width:100%;"></textarea>
+            </div><br>
+            <div class="slider-wrapper" style="padding-right:20px;">
+                    <div style="float:left;">Confidence threshold: </div>
+                    <div id="coeff_slider_val" style="float:right;">80%</div>
+                    <div><input type="range" min="0" max="100" step="1" value="80" style="width:100%;" id="precision" oninput="coeff_val_change(this.value)"></div>
+                    <!-- <p style="clear:left;"></p> -->
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-primary">Update</button>
           </div>
         </div>
       </div>
@@ -92,6 +84,7 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script src="./js/editor.js"></script>
     <script src="./js/main.js"></script>
+    <script src="./js/modal_events.js"></script>
     <script src="./js/popover_events.js"></script>
     <script src="https://use.fontawesome.com/b3f54f4da6.js"></script>
 </body>
