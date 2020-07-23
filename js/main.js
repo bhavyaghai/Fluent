@@ -41,14 +41,18 @@ function wrap_span(res) {
   reset_highlight();
   thresh = parseFloat($('#threshold').val())/100;
 
-  var s = $('.note-editable')[0].innerHTML.toLowerCase();
+  var s = $('.note-editable')[0].innerHTML;  //.toLowerCase();
   console.log(res, res.length);
   for (index = 0; index < res.length; index++) { 
     word = res[index][0].toLowerCase();
     bias_score = res[index][1];
     console.log(word,bias_score);
     // Regex to match text out of html tags [1]
-    var reg = new RegExp("<a.*?>|<span.*?<\/span>|(\\b"+word+"\\b)","ig");
+    // https://stackoverflow.com/questions/18621568/regex-replace-text-outside-html-tags
+    //var reg = new RegExp("<a.*?>|<span.*?<\/span>|(\\b"+word+"\\b)","igm");
+    // match everything between < and > or the word precedded and succeded by word break
+    var reg = new RegExp("<[^>]\*>|(\\b"+word+"\\b)","igm");
+    console.log("reg:  ", reg);
     var span = null;
 
     if(bias_score>=thresh) 
@@ -61,13 +65,15 @@ function wrap_span(res) {
                 "data-toggle":"popover", 
                 "data-content": "alternatives" //fetch_content(word)
               });
-        span[0].innerText = word;
         span.addClass("male");
       
-      // replace multiple instances of the word
-      s = s.replace(reg, function(m, group1) {
-        if (group1 != word ) return m;
-        else return span[0].outerHTML;
+      // replace multiple instances of the word (match, group1)
+      s = s.replace(reg, function(mat, group1) {
+        // match but no capture in group, so just return whatever it is
+        if (typeof group1 === "undefined") { return mat; }
+        else { 
+          span[0].innerText = group1;
+          return span[0].outerHTML; }
       });
     }
 
@@ -83,15 +89,4 @@ function wrap_span(res) {
 function coeff_val_change(newVal){
   thresh = newVal;
   $('#coeff_slider_val').text(newVal+'%');
-  /*
-  var val = $('#highlight').prop('checked');
-  if(val==true) {
-    reset_highlight();
-    get_biases();
-  } */
 }
-
-/*
-References
-[1]  https://stackoverflow.com/questions/18621568/regex-replace-text-outside-html-tags
-*/

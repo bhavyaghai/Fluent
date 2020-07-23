@@ -137,7 +137,7 @@ def get_hard_words(easy, diff, thresh, text_words):
             continue
         vec = lookup[w]
         p = round(clf.predict_proba([vec])[0][1],2)
-        print("word: ", w, "  p val: ",p)
+        #print("word: ", w, "  p val: ",p)
         if p>=thresh:
             res.append((w,p))
     #pred = clf.predict_proba(list(lookup.values()))
