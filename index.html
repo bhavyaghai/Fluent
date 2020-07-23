@@ -21,11 +21,7 @@
   
     <div class="container-fluid">
         <div id="summernote"></div>
-        <div class="row">
-            <div class="col-md-2">
-                <span> <b>Highlight</b></span>
-                <input id="highlight" type="checkbox" checked data-toggle="toggle" data-on="Gender Bias" data-off="Default" data-onstyle="success" data-offstyle="default">
-            </div>    
+        <div class="row">    
         </div>
     </div>
 
@@ -54,22 +50,22 @@
           <div class="modal-body">
             <div>
                 <b>Easy</b> to pronounce words
-                <textarea id="easy_words" rows="4" style="width:100%;"></textarea>
+                <textarea id="easy_words" rows="4" style="width:100%;">cat,rat,mat,bat,chair,table,mathematics,science,apple,banana,laptop,shirt,fan,book,boy,he,female,male</textarea>
             </div><br>
             <div>
                 <b>Difficult</b> to pronounce words       
-                <textarea id="diff_words" rows="4" style="width:100%;"></textarea>
+                <textarea id="diff_words" rows="4" style="width:100%;">Graph,Group,Trivedi,Green,Grand,Provost,Printer,Alaska,Close,Italy</textarea>
             </div><br>
             <div class="slider-wrapper" style="padding-right:20px;">
                     <div style="float:left;">Confidence threshold: </div>
                     <div id="coeff_slider_val" style="float:right;">80%</div>
-                    <div><input type="range" min="0" max="100" step="1" value="80" style="width:100%;" id="precision" oninput="coeff_val_change(this.value)"></div>
+                    <div><input type="range" min="0" max="100" step="1" value="80" style="width:100%;" id="threshold" oninput="coeff_val_change(this.value)"></div>
                     <!-- <p style="clear:left;"></p> -->
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Update</button>
+            <button type="button" class="btn btn-primary" id="update">Update</button>
           </div>
         </div>
       </div>
@@ -84,7 +80,6 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script src="./js/editor.js"></script>
     <script src="./js/main.js"></script>
-    <script src="./js/modal_events.js"></script>
     <script src="./js/popover_events.js"></script>
     <script src="https://use.fontawesome.com/b3f54f4da6.js"></script>
 </body>

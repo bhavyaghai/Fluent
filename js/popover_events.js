@@ -1,4 +1,4 @@
-// @input: given a word (which might be biased word)
+// @input: given a word (which might be hard word to say)
 // @output: html string which consists of list of alternates 
 function fetch_content(word) {
     //return "<b>New</b> function <i>called</i>"

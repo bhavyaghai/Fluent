@@ -1,41 +1,33 @@
-from flask import Flask, request, jsonify, send_file
-from flask import render_template
-import gensim.models.keyedvectors as word2vec
-from gensim.similarities.index import AnnoyIndexer
+from flask import Flask, request, jsonify, send_file, render_template
+#import gensim.models.keyedvectors as word2vec
+#from gensim.similarities.index import AnnoyIndexer
 from flask import jsonify
 from numpy.linalg import norm
-import pandas as pd
-from sklearn.decomposition import PCA
-from numpy.linalg import inv
 import numpy as np
 from gensim.models import KeyedVectors
 from gensim.scripts.glove2word2vec import glove2word2vec
-from termcolor import colored
 from scipy.spatial.distance import cosine
 import json
 from datetime import datetime
 import os
-from difflib import get_close_matches
+#from difflib import get_close_matches
 from flask import make_response
-from nltk.corpus import stopwords
 from functools import wraps, update_wrapper
 import re
 from py_thesaurus import Thesaurus
 #from thesaurus import Word
-import operator
-import nltk
-nltk.download('stopwords')
-
-
-# Hyperparameters
-g1_words = ['boy','man','he','father','son','guy','male','his','himself']
-g2_words = ['girl','woman','she','mother','daughter','gal','female','her','herself']
+#import nltk
+#nltk.download('stopwords')
+from sklearn import svm
+import sys
+import pickle
 
 
 app = Flask(__name__, static_url_path='', static_folder='', template_folder='')
-# model : pretrained weighted model
-# df : pandas dataframe (words & projections in 2D)
-model, g, g1, g2 = None, None, None, None
+
+# classifier
+clf, lookup = None, None
+
 
 def cos_sim(a, b):
     dot_product = np.dot(a, b)
@@ -43,6 +35,10 @@ def cos_sim(a, b):
     norm_b = np.linalg.norm(b)
     return dot_product / (norm_a * norm_b)
 
+# given two words 'string' -> returns their phonetic similarity
+def pcosine(w1, w2):
+    w1, w2 = w1.upper(), w2.upper()
+    return 1-cosine(lookup[w1], lookup[w2])
 
 # prevent caching
 def nocache(view):
@@ -54,24 +50,33 @@ def nocache(view):
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '-1'
         return response
-        
     return update_wrapper(no_cache, view)
 
+
 @app.route('/setModel/<name>')
-def setModel(name="Word2Vec"):
-    global model, g, g1, g2
+def load_word_embd_model(name="Word2Vec"):
+    global model
     print("Glove word embedding backend")
     model = KeyedVectors.load_word2vec_format('./data/word_embeddings/glove.wikipedia.bin', binary=True, limit=50000)  
-    g,g1,g2 = None,None,None
+    return "success"
+
+def load_phonetic_embedding():
+    global lookup
+    # read phonetic embedding pickle file
+    path = "./data/"
+    with open(path+'phonetic_embd.pickle', 'rb') as handle:
+        lookup = pickle.load(handle)
+    print("Phonetic embedding loaded !")
     return "success"
 
 
 @app.route('/')
 def index():
-    setModel()
-    groupBiasDirection_tolga()
+    load_word_embd_model()
+    load_phonetic_embedding()
     #groupBiasDirection()
     return render_template('index.html')
+
 
 @app.route('/get_default_content')
 def get_default_content():
@@ -81,115 +86,63 @@ def get_default_content():
         data = f.read()
     return data
 
-@app.route('/controller')
-def controller():
+
+@app.route('/update')
+def update():
     text = request.args.get("text")
-    print(text)
+    easy = request.args.get("easy")
+    diff = request.args.get("diff")
+    thresh = float(request.args.get("thresh"))/100
+
     if not text:
         print("Empty Text")
         return jsonify([])
+
     words = parseString(text)
-    #return jsonify(get_bias_score(words))
-    return jsonify(get_bias_score_tolga(words))
+    res = get_hard_words(easy, diff, thresh, words)
+    print("res: ", res)
+    return jsonify(res)
 
-'''
-# given a list of (word, index)
-# return a dictionary with keys as words and 
-# values as (starting_index, len of word, bias score)
-def get_bias_score(word_list):
-    out = []
-    for w,ind in word_list:
-        if w in model:
-            gen_bias = round(cosine(g2,model[w])-cosine(g1,model[w]),5)
-            out.append((w, ind, len(w), gen_bias))
-        elif w.lower() in model:
-            t = w.lower()
-            gen_bias = round(cosine(g2,model[t])-cosine(g1,model[t]),5)
-            out.append((w, ind, len(w), gen_bias))
-        else:
+
+def get_hard_words(easy, diff, thresh, text_words):
+    easy = easy.split(",")
+    difficult = diff.split(",")
+
+    print("easy words: ", easy)
+    print("difficult words: ", difficult)
+    print("thresh: ", thresh)
+
+    X, y = [], []
+    for w in easy:
+        word = w.upper()
+        if word in lookup:
+            X.append(lookup[word])
+            y.append(0)
+            
+    for w in difficult:
+        word = w.upper()
+        if word in lookup:
+            X.append(lookup[word])
+            y.append(1)
+
+    print("len X: ", len(X))
+    print("len y: ", len(y))
+    clf = svm.SVC(probability=True, random_state=0)
+    clf.fit(X, y)
+    
+    res = []
+    for w in text_words:
+        w = w.upper()
+        if w not in lookup:
             continue
-    return out
-
-def unit_vector(vec):
-    return vec/norm(vec)
-
-# calculate bias direction when we have group of words not pairs
-def groupBiasDirection():
-    global g1,g2
-    print("Group bias direction !!!!!!!")
-    dim = len(model["he"])
-    g1,g2 = np.zeros((dim,), dtype=float), np.zeros((dim,), dtype=float)
-    for p in g1_words:
-        p = p.strip()
-        if p not in model:
-            continue
-        p_vec = model[p]/norm(model[p])
-        g1 = np.add(g1,p_vec)
-
-    for q in g2_words:
-        q = q.strip()
-        if q not in model:
-            continue
-        q_vec = model[q]/norm(model[q])
-        g2 = np.add(g2,q_vec) 
-
-    g1, g2 = g1/norm(g1), g2/norm(g2)
-    return "success"
-'''
-
-def groupBiasDirection_tolga():
-    global g
-    matrix = []
-    pairs = zip(g1_words, g2_words)
-    for a, b in pairs:
-        center = (model[a] + model[b])/2
-        matrix.append(model[a] - center)
-        matrix.append(model[b] - center)
-    matrix = np.array(matrix)
-    pca = PCA(n_components = 10)
-    pca.fit(matrix)
-    g = list(pca.components_[0])
-    return
-
-def get_bias_score_tolga(word_list):
-    out = []
-    for w in word_list:
-        if w in model:
-            gen_bias = str(round(cos_sim(g,model[w]),5))
-            out.append((w, gen_bias))
-        elif w.lower() in model:
-            t = w.lower()
-            gen_bias = str(round(cos_sim(g,model[t]),5))
-            out.append((w, gen_bias))
-        else:
-            continue
-    return out
-
-def get_bias_score_by_word(w):
-    bias = None
-    if w in model:
-        bias = float(round(cos_sim(g,model[w]),5))
-    elif w.lower() in model:
-        t = w.lower()
-        bias = float(round(cos_sim(g,model[t]),5))
-    return bias
-
-# normalize bias on a scale -1,1
-# using hard coded values for max & min limits of bias
-def normalize(b,bias_type):
-    g_min, g_max = -0.30163, 0.30689
-    r_min, r_max = -0.33754, 0.41024
-    if bias_type=="gender":
-        if b>0:
-            return b/g_max
-        else:
-            return -1*(b/g_min)
-    elif bias_type=="race":
-        if b>0:
-            return b/r_max
-        else:
-            return -1*(b/r_min)
-    return "Invalid bias type !!!"
+        vec = lookup[w]
+        p = round(clf.predict_proba([vec])[0][1],2)
+        print("word: ", w, "  p val: ",p)
+        if p>=thresh:
+            res.append((w,p))
+    #pred = clf.predict_proba(list(lookup.values()))
+    #res_words = np.array(list(lookup.keys()))[pred[:,1]>thresh]
+    return res
 
 
 # Give an input string, extract words
@@ -199,15 +152,14 @@ def parseString(sentences):
     out = []
     # filtering stop words
     # only removing neutral stopwords
-    nltk_stopwords = stopwords.words('english') 
-    gender_pronouns = ['he','him','his','himself','she',"she's",'her','hers','herself',]
-    neutral_stopwords = [x for x in nltk_stopwords if x not in gender_pronouns]
+    #nltk_stopwords = stopwords.words('english') 
 
     for word in tar_words:
-        if word not in neutral_stopwords and not word.isdigit(): 
+        if not word.isdigit(): 
             #ind = re.search(r'\b({0})\b'.format(word), sentences).start()
             #out.append((word,ind))
             out.append(word)
+    out = list(set(out))
     print(out)
     return out
 
@@ -231,7 +183,8 @@ Furthermore, Thesaurus doesn't provide any quantitative score for the synonyms s
 @app.route('/alternates/<name>')
 def alternates(name):
     max_results = 5
-    thresh_bias = json.loads(request.args.get("thresh"))
+    #thresh_bias = json.loads(request.args.get("thresh"))
+    thresh_bias = 0.1
     neigh_thesau = {}
     neigh = None
     try:
@@ -280,6 +233,7 @@ def alternates(name):
     res = neigh_thesau + neigh_embd[:more_needed]
     #sorted_res = sorted(res.items(), key=lambda value: value[1])
     return jsonify(res)
+
 
 # get list of filenames for group & target folder
 @app.route('/getFileNames/')
