@@ -30,6 +30,31 @@ function fetch_content(word) {
     return result;
 }
 
+// we will fetch synonyms from: https://www.datamuse.com/api/
+function fetch_synonyms(word) {
+    res = []
+    url = "https://api.datamuse.com/words?ml="+word;
+    $.ajax({
+       url: url,
+       dataType: "json",
+       type: 'get',
+       async: false,
+       success: function(res) {
+            for(i=0;i<100;i++) 
+            { 
+                if("word" in res[i]) {
+                    w = res[i]["word"];
+                    if (/^[a-zA-Z]+$/.test(w)) {
+                        console.log(w);
+                        res.push(w)
+                    }
+                }
+            }
+            return res;
+        }
+    });
+}
+
 // Make sure that popover stays visible when we hover over popover
 function activate_popover() {
     $('[data-toggle="popover"]').popover({
