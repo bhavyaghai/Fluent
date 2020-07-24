@@ -89,6 +89,8 @@ def get_default_content():
 
 @app.route('/update')
 def update():
+    global clf
+
     text = request.args.get("text")
     easy = request.args.get("easy")
     diff = request.args.get("diff")
@@ -201,6 +203,7 @@ def alternates(name):
             word_bias = abs(get_bias_score_by_word(x))
             if word_bias<thresh_bias:
                 neigh_thesau[x] = word_bias
+                
     # if we get sufficient results from thesaurus return them (skip synonyms from word embedding)
     if len(neigh_thesau)>=max_results:
         neigh_thesau = sorted(neigh_thesau.items(), key=lambda kv: kv[1])

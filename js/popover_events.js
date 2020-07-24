@@ -67,7 +67,7 @@ function bind_list_click_handler(parent_tag) {
         // finding selected span tag
         span_tag = $("span:contains("+word+")")
         // color coding after substitution
-        span_tag.removeClass("male female");
+        span_tag.removeClass("male");
         // replace word
         for(i=0;i<span_tag.length;i++) {
             // In case "Ignore" option is chosen, replace the tag with the same text
