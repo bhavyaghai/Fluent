@@ -7,7 +7,7 @@ $(document).ready(function() {
 
     // make sure popper is not blurred
     // https://github.com/twbs/bootstrap/issues/22610
-    //Popper.Defaults.modifiers.computeStyle.gpuAcceleration = !(window.devicePixelRatio < 1.5 && /Win/.test(navigator.platform));
+    Popper.Defaults.modifiers.computeStyle.gpuAcceleration = !(window.devicePixelRatio < 1.5 && /Win/.test(navigator.platform));
 
     // default highlighting -- clicking update button programmatically
     $("#update").click();

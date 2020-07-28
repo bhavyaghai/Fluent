@@ -93,6 +93,19 @@ function activate_popover() {
 }
 
 
+// add to easy/difficult word list if not already present
+function add_to_list(word, list_name) {
+    var words_string = $("#"+list_name).val();
+    var list_words = words_string.split(",");
+    var searchIndex = list_words.indexOf(word);
+    // word is not present so add it
+    if(searchIndex<0) {
+        $("#"+list_name).val(words_string+","+word);
+        // update classifier and updating
+        $("#update").click();
+    }
+}
+
 // onClick handler for any alternate word
 function bind_list_click_handler(parent_tag) {  
     var word = parent_tag.innerText;
@@ -109,9 +122,15 @@ function bind_list_click_handler(parent_tag) {
             // In case "Ignore" option is chosen, replace the tag with the same text
             if(new_word=="Ignore") {
                 span_tag[i].replaceWith(word);
+                // it means that the word was easy (so add to easy list)
+                add_to_list(word, "easy_words")
             }
             else {
                 span_tag[i].replaceWith(new_word);
+                // it means the word was really difficult (so add to difficult if not already)
+                add_to_list(word, "diff_words")
+                // add the alternative to easy list
+                add_to_list(new_word, "easy_words")
             }
         }
         // hide popover

@@ -143,6 +143,7 @@ def get_hard_words(easy, diff, thresh, text_words):
         #print("word: ", w, "  p val: ",p)
         if p>=thresh:
             res.append((w,p))
+    print("Hard Words:  ", res)
     #pred = clf.predict_proba(list(lookup.values()))
     #res_words = np.array(list(lookup.keys()))[pred[:,1]>thresh]
     return res
@@ -170,7 +171,6 @@ def parseString(sentences):
 @app.route('/check_if_word_difficult')
 def check_if_word_difficult():
     global clf
-    print("check_if_word_difficult")
     synonyms = request.args.getlist("synonyms[]")
     thresh = float(request.args.get("thresh"))/100
 
@@ -186,9 +186,9 @@ def check_if_word_difficult():
         p = round(clf.predict_proba([vec])[0][1],2)
         #print("word: ", w, "  p val: ",p)
         if p>=thresh:
-            print(w,p)
+            #print(w,p)
             res.append((w,p))
-    print("res:  ", res)
+    print("check_if_word_difficult res:  ", res)
     return jsonify(res)
 
 ''' 
