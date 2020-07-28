@@ -78,13 +78,8 @@ body {
 }
 
 /* classes for highlighting  */
-.male {
+.hard_word {
     background-color: lightblue;
-    cursor: pointer;
-}
-
-.female {
-    background-color: pink;
     cursor: pointer;
 }
 
@@ -98,6 +93,11 @@ body {
     padding-bottom: 2px;
 }
 
+
+.popover-body {
+    padding: 0px;
+}
+
 .popover-content li {
     padding-left: 15px;
     padding-right: 15px;
@@ -107,7 +107,7 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    font-size: large;
+    /* font-size: large; */
   }
 
 .popover-content li:hover {
@@ -121,7 +121,7 @@ body {
 }
 
 #ignore_item {
-    font-size: larger;
+    font-size: large;
     text-align: center;
     padding-top: 1px;
     border-top: 1px solid lightgray;

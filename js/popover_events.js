@@ -1,59 +1,68 @@
 // @input: given a word (which might be hard word to say)
 // @output: html string which consists of list of alternates 
 function fetch_content(word) {
-    //return "<b>New</b> function <i>called</i>"
+    var syn = fetch_synonyms(word)
+    var list_syn = [];
+    for(i=0;i<syn.length;i++) 
+    { 
+        if("word" in syn[i]) {
+            w = syn[i]["word"];
+            if (/^[a-zA-Z]+$/.test(w)) {
+                list_syn.push(w)
+            }
+        }
+    }
+    console.log(word,"    ", list_syn);
     var result = null;
-    var scriptUrl = "http://localhost:5999/alternates/"+word;
     $.ajax({
-       url: scriptUrl,
+       url: "/check_if_word_difficult",
        dataType: "json",
        type: 'get',
        async: false,
        data: {
-        thresh: thresh,
+        synonyms: list_syn,
+        thresh: $('#threshold').val()
        },
        success: function(res) {
             console.log(res);
-            var pop = $(".popover-content li")
-            for(i=0; i<pop.length-1; i++) {
-                // If number of list items are more than alternate word list, then substitute ''
-                if(i>=res.length) {
-                    pop[i].innerText = "";    
-                }
-                else {
-                pop[i].innerText = res[i][0];
-                }
+            //var pop = $(".popover-content li")
+            var pop = $(".popover-content ul")
+            pop.empty();
+            var num_alternatives = res.length;
+            if(num_alternatives>5) {
+                num_alternatives = 5;
             }
-            result = $(".popover-content").html().trim()
-       } 
+            for(i=0; i<num_alternatives; i++) {
+                //    pop[i].innerText = res[i][0];
+                pop.append("<li>"+res[i][0].toLowerCase()+"</li>")
+            }
+            pop.append("<li id='ignore_item'>Ignore</li>");
+            result = $("#popover")[0].outerHTML
+            //result  = "<ul><li>chota pica</li><li>bhalu</li><li>Rai chu</li></ul>"
+            console.log("result: ", result);
+            //result = '<div class="popover-content" style="display: none"><ul><li>abc</li><li>sdf</li><li>fsd</li><li>df</li><li>dfsdf</li><li id="ignore_item">Ignore</li></ul></div>';
+        }
     });
     return result;
 }
 
 // we will fetch synonyms from: https://www.datamuse.com/api/
-function fetch_synonyms(word) {
-    res = []
-    url = "https://api.datamuse.com/words?ml="+word;
-    $.ajax({
-       url: url,
-       dataType: "json",
-       type: 'get',
-       async: false,
-       success: function(res) {
-            for(i=0;i<100;i++) 
-            { 
-                if("word" in res[i]) {
-                    w = res[i]["word"];
-                    if (/^[a-zA-Z]+$/.test(w)) {
-                        console.log(w);
-                        res.push(w)
-                    }
-                }
-            }
-            return res;
-        }
-    });
+function fetch_synonyms( word )
+{
+     var result = null;
+     var scriptUrl = "https://api.datamuse.com/words?ml="+word;
+     $.ajax({
+        url: scriptUrl,
+        type: 'get',
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            result = data;
+        } 
+     });
+     return result;
 }
+
 
 // Make sure that popover stays visible when we hover over popover
 function activate_popover() {
@@ -68,10 +77,11 @@ function activate_popover() {
         $(this).popover('show');
         bind_list_click_handler(this);
         $('.popover').on('mouseleave', function () {
-            $(_this).popover('hide');
-            unbind_list_click_handler()
+           $(_this).popover('hide');
+           unbind_list_click_handler()
         });
-    }).on('mouseleave', function () {
+    }) 
+    .on('mouseleave', function () {
         var _this = this;
         setTimeout(function () {
             if (!$('.popover:hover').length) {
@@ -79,20 +89,21 @@ function activate_popover() {
                 unbind_list_click_handler()
             }
         }, 300);
-    });
+    });  
 }
 
 
 // onClick handler for any alternate word
 function bind_list_click_handler(parent_tag) {  
     var word = parent_tag.innerText;
-    $(".popover.bottom.in li").bind("click", function(){
+    //$(".popover.bottom.in li").bind("click", function(){
+    $(".popover li").bind("click", function(){
         var new_word = $(this).text();
         console.log(word, new_word);
         // finding selected span tag
         span_tag = $("span:contains("+word+")")
         // color coding after substitution
-        span_tag.removeClass("male");
+        span_tag.removeClass("hard_word");
         // replace word
         for(i=0;i<span_tag.length;i++) {
             // In case "Ignore" option is chosen, replace the tag with the same text

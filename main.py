@@ -107,6 +107,7 @@ def update():
 
 
 def get_hard_words(easy, diff, thresh, text_words):
+    global clf
     easy = easy.split(",")
     difficult = diff.split(",")
 
@@ -165,6 +166,30 @@ def parseString(sentences):
     print(out)
     return out
 
+
+@app.route('/check_if_word_difficult')
+def check_if_word_difficult():
+    global clf
+    print("check_if_word_difficult")
+    synonyms = request.args.getlist("synonyms[]")
+    thresh = float(request.args.get("thresh"))/100
+
+    print("synonyms:  ", synonyms)
+    print("threshold:  ", thresh)
+
+    res = []
+    for w in synonyms:
+        w = w.upper()
+        if w not in lookup:
+            continue
+        vec = lookup[w]
+        p = round(clf.predict_proba([vec])[0][1],2)
+        #print("word: ", w, "  p val: ",p)
+        if p>=thresh:
+            print(w,p)
+            res.append((w,p))
+    print("res:  ", res)
+    return jsonify(res)
 
 ''' 
 # We have used two sources to get alternates: thesaurus and word embedding

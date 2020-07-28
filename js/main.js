@@ -67,9 +67,9 @@ function wrap_span(res) {
                 "data-trigger":"hover", 
                 "data-placement":"bottom",
                 "data-toggle":"popover", 
-                "data-content": "alternatives" //fetch_content(word)
+                "data-content": fetch_content(word)
               });
-        span.addClass("male");
+        span.addClass("hard_word");
       
       // replace multiple instances of the word (match, group1)
       s = s.replace(reg, function(mat, group1) {
@@ -77,7 +77,8 @@ function wrap_span(res) {
         if (typeof group1 === "undefined") { return mat; }
         else { 
           span[0].innerText = group1;
-          return span[0].outerHTML; }
+          return span[0].outerHTML; 
+        }
       });
     }
 
