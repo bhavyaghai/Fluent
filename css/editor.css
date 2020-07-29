@@ -131,7 +131,7 @@ body {
 /* 
 navbar button: preferences button
 */
-#preferences {
+#preferences, #active_learning {
     padding-top: 10px;
     padding-bottom: 0px;
     padding-right: 0px;

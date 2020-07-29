@@ -21,6 +21,7 @@ from py_thesaurus import Thesaurus
 from sklearn import svm
 import sys
 import pickle
+from scipy.stats import entropy
 
 
 app = Flask(__name__, static_url_path='', static_folder='', template_folder='')
@@ -103,7 +104,37 @@ def update():
     words = parseString(text)
     res = get_hard_words(easy, diff, thresh, words)
     print("res: ", res)
-    return jsonify(res)
+    # also get the next most difficult word
+    next_word = next_uncertain_word(easy, diff)
+    return jsonify({"hard_words":res, "next_word":next_word})
+
+
+# return list of indices corresponding to most uncertain words (sorted by highest uncertainity)
+def uncertainity_sampling():
+    X = list(lookup.values())
+    prob = clf.predict_proba(X)
+    ent = entropy(prob.T)
+    # sort in descending order so minus sign
+    sorted_ind = (-ent).argsort()
+    return sorted_ind
+
+# get next most uncertain word for active learning 
+#@app.route('/next_uncertain_word')
+def next_uncertain_word(easy, diff):
+    easy_words = easy.split(",")
+    diff_words = diff.split(",")
+    label_words = easy_words + diff_words
+    print("Label Words: ", label_words)
+    all_words = list(lookup.keys())
+    sorted_ind = uncertainity_sampling()
+    print("Sorted ind: ", sorted_ind[:10])
+    for i in sorted_ind:
+        word = all_words[i]
+        if word not in label_words:
+            break
+    next_word = all_words[i]
+    print("Next word:  ", next_word)
+    return next_word
 
 
 def get_hard_words(easy, diff, thresh, text_words):

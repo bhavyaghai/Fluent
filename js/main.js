@@ -11,6 +11,7 @@ $(document).ready(function() {
 
     // default highlighting -- clicking update button programmatically
     $("#update").click();
+    //update_next_word();
   });
 });
 
@@ -24,8 +25,9 @@ $("#update").click(function() {
       thresh: $('#threshold').val()
     },res => {
       console.log(res);
-      wrap_span(res);
-
+      wrap_span(res["hard_words"]);
+      // update next most uncertain word in the interface
+      $("#al_word").text(res["next_word"].toLowerCase());
       // close the modal
       $('#preferences_modal').modal('hide');
     });  
@@ -98,3 +100,40 @@ function coeff_val_change(newVal){
   thresh = newVal;
   $('#coeff_slider_val').text(newVal+'%');
 }
+
+
+// Active learning buttons
+$("#yes").click(function() {
+    console.log("Yes button clicked!")
+    word = $("#al_word").text()
+    // yes => word is difficult
+    add_to_list(word, "diff_words")
+    // retrain classifier and update highlighting
+    $("#update").click()
+    // update next word
+    //update_next_word()
+});
+
+$("#no").click(function() {
+    console.log("No button clicked!")
+    word = $("#al_word").text()
+    // no => it means word is easy
+    add_to_list(word, "easy_words")
+    // retrain classifier and update highlighting
+    $("#update").click()
+    // update next word
+    //update_next_word()
+});
+
+// fetech next most uncertain word and set in the interface
+/*
+function update_next_word() {
+  $.get("/next_uncertain_word", {
+      easy: $("#easy_words").val(),
+      diff: $("#diff_words").val()
+    }, res => {
+      console.log("Next word:  ", res);
+      $("#al_word").text(res.toLowerCase());
+    });
+}
+*/
