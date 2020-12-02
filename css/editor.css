@@ -2,6 +2,10 @@ body {
     background-color: #f2f2f2;
 }
 
+textarea {
+    margin-top: 5px;
+}
+
 /* summernote container */
 .note-editor.note-frame {
     border-top: 0px;

@@ -139,8 +139,8 @@ def next_uncertain_word(easy, diff):
 
 def get_hard_words(easy, diff, thresh, text_words):
     global clf
-    easy = easy.split(",")
-    difficult = diff.split(",")
+    easy = easy.replace(' ', '').split(",")
+    difficult = diff.replace(' ', '').split(",")
 
     print("easy words: ", easy)
     print("difficult words: ", difficult)
