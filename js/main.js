@@ -2,6 +2,7 @@ $(document).ready(function() {
    //$('[data-toggle="tooltip"]').tooltip()
   // Load default content
   $.get("/get_default_content",res => {
+    res = res.replace(/\n/g, "<br>");
     console.log(res);
     $("#summernote").summernote("code", res);
 
@@ -12,6 +13,12 @@ $(document).ready(function() {
     // default highlighting -- clicking update button programmatically
     $("#update").click();
     //update_next_word();
+
+    // update the highlighting after every 5 sec
+    /*
+    window.setInterval(function(){
+      $("#update").click();
+    }, 5000); */
   });
 });
 
@@ -19,7 +26,7 @@ $(document).ready(function() {
 $("#update").click(function() {
     console.log("update button clicked !!!");
     $.get("/update", {
-      text: $('.note-editable').text(),
+      text: $('.note-editable').text().toLowerCase(),
       easy: $("#easy_words").val(),
       diff: $("#diff_words").val(),
       thresh: $('#threshold').val()
@@ -45,7 +52,7 @@ function reset_highlight() {
 
 
 // Input: given list of words along with their bias score
-// then changes background colors of words accordingly
+// wraps in a div then changes background colors of words accordingly
 function wrap_span(res) {
   reset_highlight();
   thresh = parseFloat($('#threshold').val())/100;

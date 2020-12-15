@@ -3,6 +3,8 @@ $(document).ready(function() {
   $('#summernote').summernote({
     placeholder: "Let's start writing ...",
     tabsize: 4,
-    height: 450
+    height: 700,
+    disableGrammar: false,
+    spellCheck: false
   });
 });

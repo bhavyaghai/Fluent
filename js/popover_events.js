@@ -1,3 +1,11 @@
+// https://www.encodedna.com/jquery/make-jquery-contains-selector-case-insensitive.htm
+// CASE INSENSITIVE FUNCTION.
+$.expr[":"].contains = $.expr.createPseudo(function (arg) {
+    return function (elem) {
+            return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+    };
+});
+
 // @input: given a word (which might be hard word to say)
 // @output: html string which consists of list of alternates 
 function fetch_content(word) {
@@ -95,14 +103,16 @@ function activate_popover() {
 
 // add to easy/difficult word list if not already present
 function add_to_list(word, list_name) {
-    var words_string = $("#"+list_name).val();
+    var words_string = $("#"+list_name).val()
+    // get rid of all white spaces
+    words_string = words_string.replace(/ |\n|\t/g, '');
     var list_words = words_string.split(",");
     var searchIndex = list_words.indexOf(word);
     // word is not present so add it
     if(searchIndex<0) {
-        $("#"+list_name).val(words_string+","+word);
+        $("#"+list_name).val(words_string+", "+word);
         // update classifier and updating
-        $("#update").click();
+        //$("#update").click();
     }
 }
 
@@ -114,7 +124,7 @@ function bind_list_click_handler(parent_tag) {
         var new_word = $(this).text();
         console.log(word, new_word);
         // finding selected span tag
-        span_tag = $("span:contains("+word+")")
+        span_tag = $("span:contains("+word+")")     
         // color coding after substitution
         span_tag.removeClass("hard_word");
         // replace word

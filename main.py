@@ -22,13 +22,14 @@ from sklearn import svm
 import sys
 import pickle
 from scipy.stats import entropy
+import spacy
 
 
 app = Flask(__name__, static_url_path='', static_folder='', template_folder='')
 
 # classifier
 clf, lookup = None, None
-
+nlp = spacy.load("en_core_web_sm")
 
 def cos_sim(a, b):
     dot_product = np.dot(a, b)
@@ -54,12 +55,14 @@ def nocache(view):
     return update_wrapper(no_cache, view)
 
 
+'''
 @app.route('/setModel/<name>')
 def load_word_embd_model(name="Word2Vec"):
     global model
     print("Glove word embedding backend")
     model = KeyedVectors.load_word2vec_format('./data/word_embeddings/glove.wikipedia.bin', binary=True, limit=50000)  
     return "success"
+'''
 
 def load_phonetic_embedding():
     global lookup
@@ -73,7 +76,7 @@ def load_phonetic_embedding():
 
 @app.route('/')
 def index():
-    load_word_embd_model()
+    #load_word_embd_model()
     load_phonetic_embedding()
     #groupBiasDirection()
     return render_template('index.html')
@@ -83,8 +86,9 @@ def index():
 def get_default_content():
     path = "./data/"
     data = None
-    with open(path+'default_content.txt', 'r') as f:
+    with open(path+'default_content.txt', 'r', encoding="utf8") as f:
         data = f.read()
+        #print(data)
     return data
 
 
@@ -102,8 +106,9 @@ def update():
         return jsonify([])
 
     words = parseString(text)
+    print("words: ", words.count("president"))
     res = get_hard_words(easy, diff, thresh, words)
-    print("res: ", res)
+    #print("res: ", res)
     # also get the next most difficult word
     next_word = next_uncertain_word(easy, diff)
     return jsonify({"hard_words":res, "next_word":next_word})
@@ -142,9 +147,11 @@ def get_hard_words(easy, diff, thresh, text_words):
     easy = easy.replace(' ', '').split(",")
     difficult = diff.replace(' ', '').split(",")
 
-    print("easy words: ", easy)
-    print("difficult words: ", difficult)
-    print("thresh: ", thresh)
+    #print("easy words: ", easy)
+    #print("difficult words: ", difficult)
+    #print("thresh: ", thresh)
+    print("text_words: ", text_words)
+    print(text_words.count("president"))
 
     X, y = [], []
     for w in easy:
@@ -183,6 +190,8 @@ def get_hard_words(easy, diff, thresh, text_words):
 # Give an input string, extract words
 # return list of words along with their starting index
 def parseString(sentences):
+    '''
+    sentences = sentences.lower()
     tar_words = list(set(re.findall(r"[\w']+", sentences)))
     out = []
     # filtering stop words
@@ -196,7 +205,14 @@ def parseString(sentences):
             out.append(word)
     out = list(set(out))
     print(out)
-    return out
+    '''
+    doc = nlp(sentences)
+    tokens = []
+    for token in doc:
+        tokens.append(token.text)
+    tokens = list(set(tokens))
+    print(tokens)
+    return tokens
 
 
 @app.route('/check_if_word_difficult')
@@ -205,8 +221,8 @@ def check_if_word_difficult():
     synonyms = request.args.getlist("synonyms[]")
     thresh = float(request.args.get("thresh"))/100
 
-    print("synonyms:  ", synonyms)
-    print("threshold:  ", thresh)
+    #print("synonyms:  ", synonyms)
+    #print("threshold:  ", thresh)
 
     res = []
     for w in synonyms:
@@ -216,10 +232,10 @@ def check_if_word_difficult():
         vec = lookup[w]
         p = round(clf.predict_proba([vec])[0][1],2)
         #print("word: ", w, "  p val: ",p)
-        if p>=thresh:
+        if p<=thresh:
             #print(w,p)
             res.append((w,p))
-    print("check_if_word_difficult res:  ", res)
+    #print("check_if_word_difficult res:  ", res)
     return jsonify(res)
 
 ''' 
@@ -238,11 +254,13 @@ Furthermore, Thesaurus doesn't provide any quantitative score for the synonyms s
 # finally, we sort by bias and discard words with higher bias
 
 '''
+
+'''
 @app.route('/alternates/<name>')
 def alternates(name):
     max_results = 5
     #thresh_bias = json.loads(request.args.get("thresh"))
-    thresh_bias = 0.1
+    thresh_bias = 0.7
     neigh_thesau = {}
     neigh = None
     try:
@@ -292,7 +310,7 @@ def alternates(name):
     res = neigh_thesau + neigh_embd[:more_needed]
     #sorted_res = sorted(res.items(), key=lambda value: value[1])
     return jsonify(res)
-
+'''
 
 # get list of filenames for group & target folder
 @app.route('/getFileNames/')
