@@ -23,6 +23,7 @@ import sys
 import pickle
 from scipy.stats import entropy
 import spacy
+import socket
 
 
 app = Flask(__name__, static_url_path='', static_folder='', template_folder='')
@@ -322,4 +323,9 @@ def getFileNames():
     return jsonify([group,target])
 
 if __name__ == '__main__':
-   app.run(port=5999, debug=True)
+    hostname = socket.gethostname()
+    # If we are running this script on the remote server
+    if hostname=='ubuntuedge1':
+        app.run(host= '0.0.0.0', port=6999, debug=True)
+    else:
+        app.run(port=6999, debug=True)
