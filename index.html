@@ -1,36 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title>fluent</title>
-    <link rel="icon" href="./icon/atom-icon.png">
-    <meta charset="utf-8">
+    <link rel="icon" href="./icon/atom-icon.png" />
+    <meta charset="utf-8" />
     <!-- Include stylesheets -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <link href="./css/editor.css" rel="stylesheet">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+    <link
+      href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css"
+      rel="stylesheet"
+    />
+    <link href="./css/editor.css" rel="stylesheet" />
+  </head>
+  <body>
     <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" style="padding: 0px;"><p id="title">fluent</p></a>
-        <form class="form-inline">
-            <label class="btn btn-primary my-2 my-sm-0" type="button" data-toggle="modal" id="active_learning" data-target="#al_modal" title="Refine model">
-                <i class="fa fa-gear" aria-hidden="true" style="font-size: x-large; color: darkslategray;"></i>
-            </label>
-            <label class="btn btn-primary my-2 my-sm-0" type="button" data-toggle="modal" id="preferences" data-target="#preferences_modal" title="Set Preferences">
-                <i class="fa fa-bars" aria-hidden="true" style="font-size: x-large; color: darkslategray;"></i>
-            </label>
-        </form>
-     </nav>
-  
+      <a class="navbar-brand" style="padding: 0px"><p id="title">fluent</p></a>
+      <form class="form-inline">
+        <label
+          class="btn btn-primary my-2 my-sm-0"
+          type="button"
+          data-toggle="modal"
+          id="active_learning"
+          data-target="#al_modal"
+          title="Refine model"
+        >
+          <i
+            class="fa fa-gear"
+            aria-hidden="true"
+            style="font-size: x-large; color: darkslategray"
+          ></i>
+        </label>
+        <label
+          class="btn btn-primary my-2 my-sm-0"
+          type="button"
+          data-toggle="modal"
+          id="preferences"
+          data-target="#preferences_modal"
+          title="Set Preferences"
+        >
+          <i
+            class="fa fa-bars"
+            aria-hidden="true"
+            style="font-size: x-large; color: darkslategray"
+          ></i>
+        </label>
+      </form>
+    </nav>
+
     <div class="container-fluid">
-        <div id="summernote"></div>
-        <div class="row">    
-        </div>
+      <div id="summernote"></div>
+      <div class="row"></div>
     </div>
 
-    <!-- Popover content -- to show alternate words  --> 
+    <!-- Popover content -- to show alternate words  -->
     <div class="popover-content" style="display: none" id="popover">
-        <ul></ul>
+      <ul></ul>
     </div>
 
     <!-- Modal -->
@@ -39,31 +66,55 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Set Preferences</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <div>
-                <b>Easy</b> to pronounce words
-                <textarea id="easy_words" rows="4" style="width:100%;">a, an, the, cat, rat, mat, bat, chair, table, mathematics, science, apple, banana, laptop, shirt, fan, book, boy, he, female, male, leave, those</textarea>
-            </div><br>
+              <b>Easy</b> to pronounce words
+              <textarea id="easy_words" rows="4" style="width: 100%">
+a, an, the, cat, rat, mat, bat, chair, table, mathematics, science, apple, banana, laptop, shirt, fan, book, boy, he, female, male, leave, those</textarea
+              >
+            </div>
+            <br />
             <div>
-                <b>Difficult</b> to pronounce words       
-                <textarea id="diff_words" rows="4" style="width:100%;">Graph, Group, Trivedi, Green, Grand, Provost, Printer, Alaska, Close, Italy</textarea>
-            </div><br>
-            <div class="slider-wrapper" style="padding-right:20px;">
-                    <div style="float:left;">Confidence threshold: </div>
-                    <div id="coeff_slider_val" style="float:right;">70%</div>
-                    <div><input type="range" min="0" max="100" step="1" value="70" style="width:100%;" id="threshold" oninput="coeff_val_change(this.value)"></div>
-                    <!-- <p style="clear:left;"></p> -->
+              <b>Difficult</b> to pronounce words
+              <textarea id="diff_words" rows="4" style="width: 100%">
+Graph, Group, Trivedi, Green, Grand, Provost, Printer, Alaska, Close, Italy</textarea
+              >
+            </div>
+            <br />
+            <div class="slider-wrapper" style="padding-right: 20px">
+              <div style="float: left">Confidence threshold:</div>
+              <div id="coeff_slider_val" style="float: right">70%</div>
+              <div>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value="70"
+                  style="width: 100%"
+                  id="threshold"
+                  oninput="coeff_val_change(this.value)"
+                />
+              </div>
+              <!-- <p style="clear:left;"></p> -->
             </div>
           </div>
           <div class="modal-footer">
             <!--
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             -->
-            <button type="button" class="btn btn-primary" id="update">Update</button>
+            <button type="button" class="btn btn-primary" id="update">
+              Update
+            </button>
           </div>
         </div>
       </div>
@@ -74,17 +125,26 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <p class="modal-title">Do you find this word <i>difficult</i> to pronounce?</p>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <p class="modal-title">
+              Do you find this word <i>difficult</i> to pronounce?
+            </p>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-               <div id="al_word" style="font-size: xx-large; text-align: center;">Group</div> 
+            <div id="al_word" style="font-size: xx-large; text-align: center">
+              Group
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-success" id="yes">Yes</button>
-            <button type="button" class="btn btn-secondary" id="no">No</button>        
+            <button type="button" class="btn btn-secondary" id="no">No</button>
           </div>
         </div>
       </div>
@@ -93,13 +153,16 @@
     <!-- Include JS scripts -->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script src="./js/editor.js"></script>
     <script src="./js/main.js"></script>
     <script src="./js/popover_events.js"></script>
     <script src="https://use.fontawesome.com/b3f54f4da6.js"></script>
-</body>
+  </body>
 </html>

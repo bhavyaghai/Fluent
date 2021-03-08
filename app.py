@@ -17,7 +17,7 @@ import re
 from py_thesaurus import Thesaurus
 #from thesaurus import Word
 #import nltk
-#nltk.download('stopwords')
+# nltk.download('stopwords')
 from sklearn import svm
 import sys
 import pickle
@@ -25,12 +25,12 @@ from scipy.stats import entropy
 import spacy
 import socket
 
-
 app = Flask(__name__, static_url_path='', static_folder='', template_folder='')
 
 # classifier
 clf, lookup = None, None
 nlp = spacy.load("en_core_web_sm")
+
 
 def cos_sim(a, b):
     dot_product = np.dot(a, b)
@@ -39,11 +39,15 @@ def cos_sim(a, b):
     return dot_product / (norm_a * norm_b)
 
 # given two words 'string' -> returns their phonetic similarity
+
+
 def pcosine(w1, w2):
     w1, w2 = w1.upper(), w2.upper()
     return 1-cosine(lookup[w1], lookup[w2])
 
 # prevent caching
+
+
 def nocache(view):
     @wraps(view)
     def no_cache(*args, **kwargs):
@@ -65,6 +69,7 @@ def load_word_embd_model(name="Word2Vec"):
     return "success"
 '''
 
+
 def load_phonetic_embedding():
     global lookup
     # read phonetic embedding pickle file
@@ -77,9 +82,9 @@ def load_phonetic_embedding():
 
 @app.route('/')
 def index():
-    #load_word_embd_model()
+    # load_word_embd_model()
     load_phonetic_embedding()
-    #groupBiasDirection()
+    # groupBiasDirection()
     return render_template('index.html')
 
 
@@ -89,7 +94,7 @@ def get_default_content():
     data = None
     with open(path+'default_content.txt', 'r', encoding="utf8") as f:
         data = f.read()
-        #print(data)
+        # print(data)
     return data
 
 
@@ -106,13 +111,13 @@ def update():
         print("Empty Text")
         return jsonify([])
 
-    words = parseString(text)
-    print("words: ", words.count("president"))
-    res = get_hard_words(easy, diff, thresh, words)
+    words, tags = parseString(text)
+    #print("words: ", words.count("president"))
+    res = get_hard_words(easy, diff, thresh, words, tags)
     #print("res: ", res)
     # also get the next most difficult word
     next_word = next_uncertain_word(easy, diff)
-    return jsonify({"hard_words":res, "next_word":next_word})
+    return jsonify({"hard_words": res, "next_word": next_word})
 
 
 # return list of indices corresponding to most uncertain words (sorted by highest uncertainity)
@@ -124,8 +129,10 @@ def uncertainity_sampling():
     sorted_ind = (-ent).argsort()
     return sorted_ind
 
-# get next most uncertain word for active learning 
-#@app.route('/next_uncertain_word')
+# get next most uncertain word for active learning
+# @app.route('/next_uncertain_word')
+
+
 def next_uncertain_word(easy, diff):
     easy_words = easy.split(",")
     diff_words = diff.split(",")
@@ -143,7 +150,7 @@ def next_uncertain_word(easy, diff):
     return next_word
 
 
-def get_hard_words(easy, diff, thresh, text_words):
+def get_hard_words(easy, diff, thresh, text_words, tags):
     global clf
     easy = easy.replace(' ', '').split(",")
     difficult = diff.replace(' ', '').split(",")
@@ -160,7 +167,7 @@ def get_hard_words(easy, diff, thresh, text_words):
         if word in lookup:
             X.append(lookup[word])
             y.append(0)
-            
+
     for w in difficult:
         word = w.upper()
         if word in lookup:
@@ -171,49 +178,37 @@ def get_hard_words(easy, diff, thresh, text_words):
     print("len y: ", len(y))
     clf = svm.SVC(probability=True, random_state=0)
     clf.fit(X, y)
-    
+
     res = []
-    for w in text_words:
+    word_list = []
+    for w, t in zip(text_words, tags):
         w = w.upper()
         if w not in lookup:
             continue
         vec = lookup[w]
-        p = round(clf.predict_proba([vec])[0][1],2)
+        p = round(clf.predict_proba([vec])[0][1], 2)
         #print("word: ", w, "  p val: ",p)
-        if p>=thresh:
-            res.append((w,p))
+        if p >= thresh and w not in word_list:
+            res.append((w, p, t))
+            word_list.append(w)
     print("Hard Words:  ", res)
-    #pred = clf.predict_proba(list(lookup.values()))
-    #res_words = np.array(list(lookup.keys()))[pred[:,1]>thresh]
     return res
 
 
 # Give an input string, extract words
 # return list of words along with their starting index
 def parseString(sentences):
-    '''
-    sentences = sentences.lower()
-    tar_words = list(set(re.findall(r"[\w']+", sentences)))
-    out = []
-    # filtering stop words
-    # only removing neutral stopwords
-    #nltk_stopwords = stopwords.words('english') 
-
-    for word in tar_words:
-        if not word.isdigit(): 
-            #ind = re.search(r'\b({0})\b'.format(word), sentences).start()
-            #out.append((word,ind))
-            out.append(word)
-    out = list(set(out))
-    print(out)
-    '''
     doc = nlp(sentences)
     tokens = []
-    for token in doc:
-        tokens.append(token.text)
-    tokens = list(set(tokens))
-    print(tokens)
-    return tokens
+    tags = []
+
+    for i in range(len(doc)):
+        w, t = doc[i].text, doc[i].ent_type_
+        tokens.append(w)
+        tags.append(t)
+        #print(doc[i].text, doc[i].ent_iob_, doc[i].ent_type_)
+    #tokens = list(set(tokens))
+    return (tokens, tags)
 
 
 @app.route('/check_if_word_difficult')
@@ -231,13 +226,33 @@ def check_if_word_difficult():
         if w not in lookup:
             continue
         vec = lookup[w]
-        p = round(clf.predict_proba([vec])[0][1],2)
+        p = round(clf.predict_proba([vec])[0][1], 2)
         #print("word: ", w, "  p val: ",p)
-        if p<=thresh:
-            #print(w,p)
-            res.append((w,p))
+        if p <= thresh:
+            # print(w,p)
+            res.append((w, p))
     #print("check_if_word_difficult res:  ", res)
     return jsonify(res)
+
+
+# get list of filenames for group & target folder
+@app.route('/getFileNames/')
+def getFileNames():
+    tar_path = './data/wordList/target'
+    gp_path = './data/wordList/groups'
+    target = os.listdir(tar_path)
+    group = os.listdir(gp_path)
+    return jsonify([group, target])
+
+
+if __name__ == '__main__':
+    hostname = socket.gethostname()
+    # If we are running this script on the remote server
+    if hostname == 'ubuntuedge1':
+        app.run(host='0.0.0.0', port=5999, debug=True)
+    else:
+        app.run(port=5999, debug=True)
+
 
 ''' 
 # We have used two sources to get alternates: thesaurus and word embedding
@@ -312,20 +327,3 @@ def alternates(name):
     #sorted_res = sorted(res.items(), key=lambda value: value[1])
     return jsonify(res)
 '''
-
-# get list of filenames for group & target folder
-@app.route('/getFileNames/')
-def getFileNames():
-    tar_path = './data/wordList/target'
-    gp_path = './data/wordList/groups'
-    target = os.listdir(tar_path)
-    group = os.listdir(gp_path)
-    return jsonify([group,target])
-
-if __name__ == '__main__':
-    hostname = socket.gethostname()
-    # If we are running this script on the remote server
-    if hostname=='ubuntuedge1':
-        app.run(host= '0.0.0.0', port=6999, debug=True)
-    else:
-        app.run(port=6999, debug=True)
