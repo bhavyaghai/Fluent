@@ -13,7 +13,7 @@ $(document).ready(function () {
     );
 
     // default highlighting -- clicking update button programmatically
-    $("#update").click();
+    //$("#update").click();
     //update_next_word();
 
     // update the highlighting after every 5 sec
