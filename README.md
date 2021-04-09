@@ -14,7 +14,7 @@ Stuttering is a speech disorder which impacts the personal and professional live
 ## Installation Instructions
 
 - Clone this repo
-- Install Dependencies like flask, gensim, py_thesaurus, etc.
+- Install Dependencies like flask, gensim, py_thesaurus, spacy, etc.
 - Run python main.py
 - Browse localhost:5999
 
