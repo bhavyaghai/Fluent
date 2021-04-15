@@ -78,7 +78,8 @@ function wrap_span(res) {
     if (bias_score >= thresh) {
       span = jQuery("<span></span>").attr({
         tabindex: "0",
-        //title: "<b>" + word + ":</b>" + bias_score*100+"%",
+        //title: "<b>" + word + ":  </b>" + bias_score * 100 + "%",
+        title: "<b>" + word + ":</b>" + bias_score,
         "data-trigger": "hover",
         "data-placement": "bottom",
         "data-toggle": "popover",
