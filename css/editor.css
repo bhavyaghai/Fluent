@@ -1,145 +1,147 @@
 body {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
 textarea {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 /* summernote container */
 .note-editor.note-frame {
-    border-top: 0px;
-    border-radius: 0px 0px 5px 5px;
-    background-color: white;
+  border-top: 0px;
+  border-radius: 0px 0px 5px 5px;
+  background-color: white;
 }
 
 /* summernote button */
 .note-btn-group .note-btn {
-    background-color: darkseagreen;
-    border: 0px;
-    font-size: 15px !important;
+  background-color: darkseagreen;
+  border: 0px;
+  font-size: 15px !important;
 }
 
 .note-toolbar {
-    background-color: darkseagreen !important;
+  background-color: darkseagreen !important;
 }
 
-.note-editor.note-airframe, .note-editor.note-frame {
-    border-top: 0px !important;
+.note-editor.note-airframe,
+.note-editor.note-frame {
+  border-top: 0px !important;
 }
 
 /* Bend toolbar with navbar */
 .note-toolbar.panel-heading {
-    padding-left: 1%;
-    background-color: darkseagreen;
+  padding-left: 1%;
+  background-color: darkseagreen;
 }
 
 /* Make larger buttons in the toolbar*/
-.btn-group-sm>.btn, .btn-sm {
-    font-size: large;
+.btn-group-sm > .btn,
+.btn-sm {
+  font-size: large;
 }
 
 .navbar {
-    width: 80%;
-    margin: auto;
-    background-color: white;
-    border: 0px;
-    background-color: darkseagreen !important;
-    border-radius: 15px 15px 0px 0px;
-    margin-top: 1%;
-    padding-top: 0px;
-    padding-bottom: 0px;
+  width: 80%;
+  margin: auto;
+  background-color: white;
+  border: 0px;
+  background-color: darkseagreen !important;
+  border-radius: 15px 15px 0px 0px;
+  margin-top: 1%;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .navbar-brand {
-    max-width: 15%;
+  max-width: 15%;
 }
 
 .container-fluid {
-    width: 80%;
-    padding-left: 0px;
-    padding-right: 0px;
-    background-color: white;
-    margin-left: 10%;
-    margin-right: 10%;
+  width: 80%;
+  padding-left: 0px;
+  padding-right: 0px;
+  background-color: white;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 #editor {
-    border: 0px;
-    height: 80%;
+  border: 0px;
+  height: 80%;
 }
 
 #title {
-    font-size: xxx-large;
-    font-family: monospace;
-    font-weight: bold;
-    color: green;
-    margin-bottom: 0px;
+  font-size: xxx-large;
+  font-family: monospace;
+  font-weight: bold;
+  color: green;
+  margin-bottom: 0px;
 }
 
 #logo_image {
-    padding-top: 5px;
+  padding-top: 5px;
 }
 
 /* classes for highlighting  */
 .hard_word {
-    background-color: lightblue;
-    cursor: pointer;
+  background-color: lightblue;
+  cursor: pointer;
 }
 
 .neutral {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 /* Popover list */
 .popover-content {
-    padding: 0px;
-    padding-bottom: 2px;
+  padding: 0px;
+  padding-bottom: 2px;
 }
 
-
 .popover-body {
-    padding: 0px;
+  padding: 0px;
 }
 
 .popover-content li {
-    padding-left: 15px;
-    padding-right: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .popover-content ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    /* font-size: large; */
-  }
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  /* font-size: large; */
+}
 
 .popover-content li:hover {
-    background-color: lightgray;
-    cursor: pointer;
+  background-color: lightgray;
+  cursor: pointer;
 }
 
 .popover-content li:active {
-    background-color:lightgreen;
-    cursor: pointer;
+  background-color: lightgreen;
+  cursor: pointer;
 }
 
 #ignore_item {
-    font-size: large;
-    text-align: center;
-    padding-top: 1px;
-    border-top: 1px solid lightgray;
-    list-style-position: inside;
+  font-size: large;
+  text-align: center;
+  padding-top: 1px;
+  border-top: 1px solid lightgray;
+  list-style-position: inside;
 }
 
 /* 
 navbar button: preferences button
 */
-#preferences, #active_learning {
-    padding-top: 10px;
-    padding-bottom: 0px;
-    padding-right: 0px;
-    background-color: transparent;
-    border-color: transparent;
+#preferences,
+#active_learning,
+#update_button {
+  padding-top: 10px;
+  padding-bottom: 0px;
+  padding-right: 0px;
+  background-color: transparent;
+  border-color: transparent;
 }
-
