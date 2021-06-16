@@ -25,7 +25,7 @@ from scipy.stats import entropy
 import spacy
 import socket
 
-app = Flask(__name__, static_url_path='', static_folder='', template_folder='')
+app = Flask(__name__, static_url_path='', static_folder='', template_folder='templates')
 
 # classifier
 clf, lookup = None, None
