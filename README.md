@@ -8,7 +8,7 @@
 
 Paper accepted at ACM SIGACCESS Conference on Computers and Accessibility, ACM ASSETS, 2021
 
-![teaser figure](https://i.ibb.co/BZ88Q1W/teaser-wordbias.png)
+![teaser figure](teaser.png)
 
 The above picture shows the visual Interface of Fluent. Words highlighted in blue are the ones which the user might find difficult to pronounce. Hovering over such words presents a set of alternatives (including Ignore option) which have similar meaning but might be easier to pronounce. In the above picture, the user hovers over the word 'country' and the tool presents a set of alternatives namely, nation, state, commonwealth, area, etc. Two buttons on the top right corner allows the user to provide explicit feedback and update their preferences respectively.
 
