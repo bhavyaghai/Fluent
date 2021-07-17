@@ -1,20 +1,10 @@
 # Fluent: An AI Augmented Writing Tool for People who Stutter
 
-- #### Read paper (including Supplementary material) [PDF](https://arxiv.org/abs/2103.03598)
-
-- #### Video Presentation (5min) https://www.youtube.com/watch?v=LcwlyU3QT0w
-
-- #### Live DEMO http://130.245.128.219:6999/
-
 Paper accepted at ACM SIGACCESS Conference on Computers and Accessibility, ACM ASSETS, 2021
 
 ![teaser figure](teaser.png)
 
 The above picture shows the visual Interface of Fluent. Words highlighted in blue are the ones which the user might find difficult to pronounce. Hovering over such words presents a set of alternatives (including Ignore option) which have similar meaning but might be easier to pronounce. In the above picture, the user hovers over the word 'country' and the tool presents a set of alternatives namely, nation, state, commonwealth, area, etc. Two buttons on the top right corner allows the user to provide explicit feedback and update their preferences respectively.
-
-## Video Teaser
-
-Coming soon ... 
 
 ## Overview
 
