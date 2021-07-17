@@ -145,6 +145,7 @@ function bind_list_click_handler(parent_tag) {
     }
     // hide popover
     $(".popover").popover("hide");
+    $("#update").click();
   });
 }
 
