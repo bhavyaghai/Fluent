@@ -11,7 +11,7 @@ Paper accepted at ACM SIGACCESS Conference on Computers and Accessibility, ACM A
 
 The above picture shows the visual Interface of Fluent. Words highlighted in blue are the ones which the user might find difficult to pronounce. Hovering over such words presents a set of alternatives (including Ignore option) which have similar meaning but might be easier to pronounce. In the above picture, the user hovers over the word 'country' and the tool presents a set of alternatives namely, nation, state, commonwealth, area, etc. Two buttons on the top right corner allows the user to provide explicit feedback and update their preferences respectively.
 
-## Video Teaser
+## DEMO Video
 
 https://user-images.githubusercontent.com/4745227/131208591-13c46c37-c69d-4241-ad28-c747ae63e387.mp4
 
