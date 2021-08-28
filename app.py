@@ -1,11 +1,12 @@
-from flask import Flask, request, jsonify, send_file, render_template
+from flask import Flask, request, jsonify, render_template, session
+from flask_session import Session
 #import gensim.models.keyedvectors as word2vec
 #from gensim.similarities.index import AnnoyIndexer
 from flask import jsonify
 from numpy.linalg import norm
 import numpy as np
-from gensim.models import KeyedVectors
-from gensim.scripts.glove2word2vec import glove2word2vec
+#from gensim.models import KeyedVectors
+#from gensim.scripts.glove2word2vec import glove2word2vec
 from scipy.spatial.distance import cosine
 import json
 from datetime import datetime
@@ -14,7 +15,7 @@ import os
 from flask import make_response
 from functools import wraps, update_wrapper
 import re
-from py_thesaurus import Thesaurus
+#from py_thesaurus import Thesaurus
 #from thesaurus import Word
 #import nltk
 # nltk.download('stopwords')
@@ -25,10 +26,15 @@ from scipy.stats import entropy
 import spacy
 import socket
 
+
 app = Flask(__name__, static_url_path='', static_folder='', template_folder='templates')
+app.config["SESSION_PERMANENT"] = False
+app.config['SESSION_TYPE'] = 'filesystem'
+app.secret_key = os.urandom(24)
+Session(app)
 
 # classifier
-clf, lookup = None, None
+lookup = None
 nlp = spacy.load("en_core_web_sm")
 
 
@@ -39,13 +45,6 @@ def cos_sim(a, b):
     return dot_product / (norm_a * norm_b)
 
 # given two words 'string' -> returns their phonetic similarity
-
-
-def pcosine(w1, w2):
-    w1, w2 = w1.upper(), w2.upper()
-    return 1-cosine(lookup[w1], lookup[w2])
-
-# prevent caching
 
 
 def nocache(view):
@@ -100,7 +99,6 @@ def get_default_content():
 
 @app.route('/update')
 def update():
-    global clf
 
     text = request.args.get("text")
     easy = request.args.get("easy")
@@ -122,6 +120,7 @@ def update():
 
 # return list of indices corresponding to most uncertain words (sorted by highest uncertainity)
 def uncertainity_sampling():
+    clf = pickle.loads(session['model'])
     X = list(lookup.values())
     prob = clf.predict_proba(X)
     ent = entropy(prob.T)
@@ -137,29 +136,26 @@ def next_uncertain_word(easy, diff):
     easy_words = easy.split(",")
     diff_words = diff.split(",")
     label_words = easy_words + diff_words
-    print("Label Words: ", label_words)
+    #print("Label Words: ", label_words)
     all_words = list(lookup.keys())
     sorted_ind = uncertainity_sampling()
-    print("Sorted ind: ", sorted_ind[:10])
+    #print("Sorted ind: ", sorted_ind[:10])
     for i in sorted_ind:
         word = all_words[i]
         if word not in label_words:
             break
     next_word = all_words[i]
-    print("Next word:  ", next_word)
+    #print("Next word:  ", next_word)
     return next_word
 
 
 def get_hard_words(easy, diff, thresh, text_words, tags):
-    global clf
+    
     easy = easy.replace(' ', '').split(",")
     difficult = diff.replace(' ', '').split(",")
 
-    #print("easy words: ", easy)
-    #print("difficult words: ", difficult)
-    #print("thresh: ", thresh)
-    print("text_words: ", text_words)
-    print(text_words.count("president"))
+    #print("text_words: ", text_words)
+    #print(text_words.count("president"))
 
     X, y = [], []
     for w in easy:
@@ -174,11 +170,12 @@ def get_hard_words(easy, diff, thresh, text_words, tags):
             X.append(lookup[word])
             y.append(1)
 
-    print("len X: ", len(X))
-    print("len y: ", len(y))
+    #print("len X: ", len(X))
+    #print("len y: ", len(y))
     clf = svm.SVC(probability=True, random_state=0)
     clf.fit(X, y)
-
+    session['model'] = pickle.dumps(clf)
+    print("**********************       MODEL IS SET         ***************************")
     res = []
     word_list = []
     for w, t in zip(text_words, tags):
@@ -191,7 +188,7 @@ def get_hard_words(easy, diff, thresh, text_words, tags):
         if p >= thresh and w not in word_list:
             res.append((w, p, t))
             word_list.append(w)
-    print("Hard Words:  ", res)
+    #print("Hard Words:  ", res)
     return res
 
 
@@ -213,7 +210,12 @@ def parseString(sentences):
 
 @app.route('/check_if_word_difficult')
 def check_if_word_difficult():
-    global clf
+    clf = None
+    if 'model' in session:
+        clf = pickle.loads(session['model'])
+    else:
+        print("***           Couldn't ACESS session model                ***********")
+        return jsonify([])
     synonyms = request.args.getlist("synonyms[]")
     thresh = float(request.args.get("thresh"))/100
 
@@ -249,81 +251,7 @@ if __name__ == '__main__':
     hostname = socket.gethostname()
     # If we are running this script on the remote server
     if hostname == 'ubuntuedge1':
-        app.run(host='0.0.0.0', port=5999, debug=True)
+        app.run(host='0.0.0.0', port=3999, debug=True)
     else:
-        app.run(port=5999, debug=True)
+        app.run(port=3999, debug=True)
 
-
-''' 
-# We have used two sources to get alternates: thesaurus and word embedding
-# To evaluate best alternates, we have two metrics: similarity sscore & bias score
-# we want words with high similarity & least bias (at least lesser than initial bias)
-# Based on empirical study of few sample words, We assume that synoyms produced by thesaurus are better than
-the ones prduced by word embeddings.
-# Hence synonyms from thesaurus are discarded only when its correspoding bias score is greater than initial bias
-or the word is not present in word embedding model
-Furthermore, Thesaurus doesn't provide any quantitative score for the synonyms so its difficult to compare similarity.
-
-# For synonyms extracted from word embedding, we compare bias score and similarity score
-# Ideally, we should find pareto optimal front to find word with highest similarity & least bias
-# In our case, we consider all synonyms whose similarity>threshold and whose bias score is less than initial bias
-# finally, we sort by bias and discard words with higher bias
-
-'''
-
-'''
-@app.route('/alternates/<name>')
-def alternates(name):
-    max_results = 5
-    #thresh_bias = json.loads(request.args.get("thresh"))
-    thresh_bias = 0.7
-    neigh_thesau = {}
-    neigh = None
-    try:
-        w = Word(name)
-        neigh = w.synonyms()
-    except:
-        print("Not Found in Thesaurus !!!")
-    
-    # if synonyms for the word are available
-    if neigh:
-        for x in neigh:
-            if x not in model:
-                continue
-            word_bias = abs(get_bias_score_by_word(x))
-            if word_bias<thresh_bias:
-                neigh_thesau[x] = word_bias
-                
-    # if we get sufficient results from thesaurus return them (skip synonyms from word embedding)
-    if len(neigh_thesau)>=max_results:
-        neigh_thesau = sorted(neigh_thesau.items(), key=lambda kv: kv[1])
-        res = neigh_thesau[:max_results]
-        return jsonify(res)
-    
-    neigh_embd = {}
-    synonym_limit_embedding = 2*max_results
-    min_semantic_sim = 0.60
-    if name in model:
-        neigh = model.similar_by_word(name, topn=synonym_limit_embedding)
-    else:
-        neigh = model.similar_by_word(name.lower(), topn=synonym_limit_embedding)
-    
-    for w,sim in neigh:
-        word_bias = abs(get_bias_score_by_word(w))
-        # If word is not already counted by thesaurus &
-        # word semantic similarity is greater than some threshold &
-        # bias score of synonym is less than the specific word
-        if sim<min_semantic_sim:
-            break
-        if w not in neigh_thesau and word_bias<thresh_bias:
-            neigh_embd[w] = word_bias
-    
-    neigh_thesau = sorted(neigh_thesau.items(), key=lambda kv: kv[1])
-    more_needed = max_results-len(neigh_thesau)
-    #print(more_needed)
-    
-    neigh_embd = sorted(neigh_embd.items(), key=lambda kv: kv[1])
-    res = neigh_thesau + neigh_embd[:more_needed]
-    #sorted_res = sorted(res.items(), key=lambda value: value[1])
-    return jsonify(res)
-'''

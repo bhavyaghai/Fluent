@@ -2,5 +2,4 @@ flask
 numpy==1.19.3
 sklearn
 scipy
-py_thesaurus
-gensim
+spacy
