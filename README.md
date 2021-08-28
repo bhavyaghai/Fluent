@@ -24,7 +24,9 @@ Stuttering is a speech disorder which impacts the personal and professional live
 
 - Clone this repo
 
-- Install Dependencies like flask, spacy, sklearn, scipy, etc.
+- Install Dependencies using: pip install -r req.txt
+
+- python -m spacy download en_core_web_sm
 
 - Run python app.py
 
