@@ -13,6 +13,7 @@ The above picture shows the visual Interface of Fluent. Words highlighted in blu
 
 ## Video Teaser
 
+https://user-images.githubusercontent.com/4745227/131208591-13c46c37-c69d-4241-ad28-c747ae63e387.mp4
 
 
 ## Overview
