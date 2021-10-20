@@ -2,7 +2,9 @@
 
 Paper accepted at ACM SIGACCESS Conference on Computers and Accessibility, ACM ASSETS, 2021
 
-- #### Read paper [PDF](https://arxiv.org/abs/2108.09918)
+- #### Read paper [PDF](https://dl.acm.org/doi/10.1145/3441852.3471211)
+
+- #### Paper Presentation [Video](https://www.youtube.com/watch?v=H-I21hn5-gM&ab_channel=ACMSIGACCESS)
 
 - #### Live DEMO http://130.245.128.219:3999/
 
