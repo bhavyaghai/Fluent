@@ -37,13 +37,13 @@ Stuttering is a speech disorder which impacts the personal and professional live
 ## Citation
 
 ```
-@article{ghai2021fluent,
+@inproceedings{ghai2021fluent,
   title={Fluent: An AI Augmented Writing Tool for People who Stutter},
   author={Ghai, Bhavya and Mueller, Klaus},
-  journal={arXiv preprint arXiv:2108.09918},
+  booktitle={The 23rd International ACM SIGACCESS Conference on Computers and Accessibility},
+  pages={1--8},
   year={2021}
-}
-```
+}```
 
 Feel free to email me for any questions, comments at bghai@cs.stonybrook.edu
 
