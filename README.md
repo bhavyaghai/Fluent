@@ -43,7 +43,7 @@ Stuttering is a speech disorder which impacts the personal and professional live
   booktitle={The 23rd International ACM SIGACCESS Conference on Computers and Accessibility},
   pages={1--8},
   year={2021}
-}```
+}
+```
 
 Feel free to email me for any questions, comments at bghai@cs.stonybrook.edu
-
